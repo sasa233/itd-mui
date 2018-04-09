@@ -32,8 +32,6 @@
 			//}
 			var scan = null;
 			mui.plusReady(function() {
-				//var e = document.getElementById("scan");
-				//e.removeAttribute("disabled");
 				// 手机设备准备就绪时，可创建扫描控件，且创建一次
 				scan = new plus.barcode.Barcode('bcid');
 				// 扫描成功事件则绑定一个函数onmarked
@@ -71,10 +69,10 @@
 			function cancelScan() {
 				scan.cancel();
 			}
-			var isOpened = false;
+			var isOpen = false;
 			function setFlash() {
-				isOpened = !isOpened
-				scan.setFlash(isOpened);
+				isOpen = !isOpen;
+				scan.setFlash(isOpen);
 			}
 		</script>
 	</head>
