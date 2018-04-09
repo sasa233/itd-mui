@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			html,
+			body {
+				margin: 0px;
+				padding: 0px;
+				height: 100%;
+			}
+			
+			#bcid {
+				background: #CCC;
+				height: 380px;
+				width: 360px;
+			}
+		</style>
+
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			// 扩展API加载完毕后调用onPlusReady回调函数 
+			//document.addEventListener("plusready", onPlusReady, false);
+			// 扩展API加载完毕，现在可以正常调用扩展API
+			//function onPlusReady() {
+			//	var e = document.getElementById("scan");
+			//	e.removeAttribute("disabled");
+			//}
+			var scan = null;
+			mui.plusReady(function() {
+				//var e = document.getElementById("scan");
+				//e.removeAttribute("disabled");
+				// 手机设备准备就绪时，可创建扫描控件，且创建一次
+				scan = new plus.barcode.Barcode('bcid');
+				// 扫描成功事件则绑定一个函数onmarked
+				scan.onmarked = onmarked;
+			});
+			
+			// 绑定函数（type-二维码类型，result-扫描得到的数据）
+			function onmarked(type, result) {
+				var text = '未知: ';
+				switch(type) {
+					case plus.barcode.QR:
+						text = 'QR: ';
+						break;
+					case plus.barcode.EAN13:
+						text = 'EAN13: ';
+						break;
+					case plus.barcode.EAN8:
+						text = 'EAN8: ';
+						break;
+				}
+				//alert(text + result);
+				var txt = document.querySelector('#text');
+				txt.value = text + result; // #text是一个input标签
+			}
+
+			function startRecognize() {
+			//	scan = new plus.barcode.Barcode('bcid');
+			//	scan.onmarked = onmarked;
+			}
+
+			function startScan() {
+				scan.start();
+			}
+
+			function cancelScan() {
+				scan.cancel();
+			}
+			var isOpened = false;
+			function setFlash() {
+				isOpened = !isOpened
+				scan.setFlash(isOpened);
+			}
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">二维码扫描（需在真机上测试）</h1>
+		</header>
+		<div class="mui-content">
+			<!-- 四个按钮捆绑了事件 -->
+			<input type='button' onclick='startRecognize()' value='创建扫描控件' />
+			<input type='button' onclick='startScan()' value='开始扫描' />
+			<input type='button' onclick='cancelScan()' value='取消扫描' />
+			<input type='button' onclick='setFlash()' value='开启闪光灯' />
+			<div id="bcid"></div>
+			<input type='text' id='text' />
+		</div>
+
+	</body>
+
+</html>

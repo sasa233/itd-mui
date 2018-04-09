@@ -13,7 +13,7 @@
 					container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 					down: {
 						height: 50, //可选,默认50.触发下拉刷新拖动距离,
-						auto: false, //可选,默认false.首次加载自动下拉刷新一次
+						auto: true, //可选,默认false.首次加载自动下拉刷新一次
 						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
 						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
 						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
@@ -25,24 +25,39 @@
 			});
 
 			function ajaxDate() {
-				//alert("向后台发送ajax请求......");
-				// 1：获取当前ul标签
-				var ul = document.querySelector('.mui-table-view');
-				// 2：通过js动态创建li标签（且添加样式）
-				for(var i = 1; i <= 5; i++) {
-					var li = document.createElement('li');
-					li.className = 'mui-table-view-cell mui-media';
-					// 3：给li添加数据
-					li.innerHTML = '<li class="mui-table-view-cell mui-media"> \
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30"> \
-							<div class="mui-media-body"> \
-								幸福 <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p> \
-							</div> </li>';
-					// 4：把当前的li添加到ul中
-					ul.insertBefore(li, ul.firstChild);
-				}
-				// 5：结束下拉刷新
-				mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+				//alert("向后台发送ajax请求......");	
+				// 向服务器发送请求数据
+				mui.ajax('http://hiwbs101083.jsp.jspee.com.cn/json.txt', {
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					//crossDomain: true,
+					success: function(data) { // [{},{},{}]
+						//服务器返回响应,可以是XML或者JSON,建议JSON格式,此处JSON数组
+						// 1: 获取当前ul
+						var ul = document.querySelector('.mui-table-view');
+						// 更新数据，先清空之前的数据
+						ul .innerText = '';
+						// 2: 通过js动态创建一个li标签(并且添加样式)
+						mui.each(data, function(index, item) {
+							var li = document.createElement('li');
+							li.className = 'mui-table-view-cell mui-media';
+							// 3: 给li添加数据
+							li.innerHTML = '<img class="mui-media-object mui-pull-right" src="' + item.imgUrl + '">\
+ 											<div class="mui-media-body">' + item.title + '\
+ 												<p class="mui-ellipsis">' + item.content + '</p>\
+ 											</div>';
+							// 4: 把当前li添加到ul中(first-child)
+							ul.insertBefore(li, ul.firstChild);
+						});
+						// 5: 结束下拉刷新
+						mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log("出错信息:" + type);
+						mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+					}
+				});
 			}
 		</script>
 	</head>
@@ -61,6 +76,7 @@
                 	<ul class="mui-table-view mui-table-view-chevron">
                 -->
 				<ul class="mui-table-view">
+					<!--
 					<li class="mui-table-view-cell mui-media">
 						<a href="javascript:;">
 							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
@@ -70,6 +86,7 @@
 							</div>
 						</a>
 					</li>
+					-->
 				</ul>
 
 				</ul>
