@@ -1,0 +1,21 @@
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1523167193286'); /* IE9*/
+  src: url('../fonts/iconfont.ttf?t=1523167193286') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+.icon-jiansheyinxing:before { content: "\e654"; }
+
+.icon-haiguan:before { content: "\e6ac"; }
+
+.icon-dianxin:before { content: "\e605"; }
+
+.icon-yidong:before { content: "\e614"; }
+
